@@ -11,7 +11,7 @@ class Cultura:
     def read_all(cls):
         with DBConnection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM t_cultura")
+            cursor.execute("SELECT * FROM t_ssa_cultura")
             rows = cursor.fetchall()
             return [cls(*row) for row in rows]
     
@@ -19,6 +19,6 @@ class Cultura:
     def read_by_nm_cultura(cls, nm_cultura):
         with DBConnection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM t_cultura WHERE nm_cultura = :nm_cultura", [nm_cultura])
+            cursor.execute("SELECT * FROM t_ssa_cultura WHERE nm_cultura = :nm_cultura", [nm_cultura])
             row = cursor.fetchone()
             return cls(*row) if row else None
