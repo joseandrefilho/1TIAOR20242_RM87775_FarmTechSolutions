@@ -19,87 +19,52 @@
 
 ## Objetivo do Projeto
 
-Este projeto visa criar um sistema inteligente de monitoramento agrícola utilizando o microcontrolador ESP32 e sensores para coletar dados ambientais e automatizar a irrigação baseado na cultura de cana-de-açúcar. O sistema integra as variáveis de temperatura, umidade, luminosidade e nível de água no reservatório para tomar decisões automatizadas, garantindo eficiência no uso de água e melhor desenvolvimento da planta.
+O projeto **FarmTech Solutions** visa desenvolver um sistema de monitoramento e controle inteligente para a irrigação e o manejo de culturas agrícolas, utilizando um **ESP32** e sensores simulados no ambiente [Wokwi](https://wokwi.com/). Este sistema coleta dados ambientais relevantes — como umidade do solo, níveis de nutrientes (P e K) e valores de pH — permitindo decisões automatizadas e eficientes para o controle de irrigação e aplicação de fertilizantes, promovendo o uso otimizado de recursos.
 
-O sistema também incorpora uma lógica de segurança, onde a irrigação é interrompida caso o sensor PIR detecte movimento de pessoas ou animais.
+### Importância do Projeto
 
-## Estrutura do Repositório
+Este sistema é projetado para promover a **gestão inteligente da água** em ambientes agrícolas, onde a irrigação eficiente é essencial. Ao ajustar automaticamente a irrigação com base nas condições reais do solo, o projeto contribui para uma agricultura sustentável e de precisão, resultando em economia de água e aumento da produtividade, especialmente em plantações de grande escala, como a cultura da cana-de-açúcar.
 
-```plaintext
-/
-├── assets/
-│   ├── logo-fiap.png           # Logo da FIAP
-├── docs/
-│   ├── README.md               # Documentação detalhada do projeto
-│   ├── circuito_diagrama.png   # Diagrama do circuito utilizado
-├── src/
-│   ├── sketch.ino              # Código-fonte principal
-│   ├── diagram.json            # Arquivo JSON que representa o diagrama do circuito
-├── tests/
-│   └── README.md               # Documentação dos testes dos sensores e funções do projeto
-│   └── *.png                   # Prints dos testes dos sensores e funções do projeto utilizados no README
-├── README.md                   # Este arquivo
-```
+## Sensores e Componentes Utilizados
 
-## Funcionalidades
+1. **DHT22 (Umidade e Temperatura)** - Conectado ao GPIO 4.
+2. **LDR (Intensidade de Luz, representando pH)** - Conectado ao GPIO 32.
+3. **Botões (Nutrientes P e K)** - Conectados a GPIOs específicos para simular dados de nutrientes.
+4. **Relé (Controle de Irrigação)** - Conectado a um GPIO para ativar ou desativar a irrigação.
 
-1. **Monitoramento climático**: O sensor DHT22 mede constantemente a temperatura e umidade do ambiente, ajustando a irrigação de acordo com os níveis ideais baseado na cultura de cana-de-açúcar.
-   
-2. **Controle de irrigação automatizada**: O sensor HC-SR04 verifica o nível de água no reservatório e garante que a irrigação só seja ativada quando há água suficiente disponível para o tipo de irrigação necessário (leve, moderada ou intensiva).
+### Substituição de Sensores
+- **Nutrientes P e K**: Em vez de sensores de nutrientes específicos, usamos dois botões, onde cada um representa a presença ou ausência do nutriente.
+- **Sensor de pH**: Usamos um sensor de luminosidade (LDR) para simular o comportamento do pH, permitindo variar os valores em uma escala similar ao pH.
 
-3. **Detecção de presença**: O sensor PIR detecta a presença de intrusos (humanos ou animais) e bloqueia a ativação da irrigação por motivos de segurança.
+## Instruções de Configuração e Simulação
 
-4. **Ajuste de irrigação com base na luminosidade**: O sensor LDR ajusta a quantidade de água utilizada na irrigação, aumentando-a em dias ensolarados e reduzindo-a em dias nublados, para garantir eficiência no uso de água.
+### Configuração do Circuito
+1. No [Wokwi](https://wokwi.com/), crie um projeto com ESP32 e configure o circuito conforme descrito abaixo:
+   - **DHT22** no GPIO 4 para dados de umidade e temperatura.
+   - **LDR** no GPIO 32 para leitura de pH.
+   - **Botões** em GPIOs específicos para nutrientes P e K.
+   - **Relé** em um GPIO dedicado ao controle de irrigação.
+2. Verifique o diagrama do circuito (`circuito_diagrama.png`) para detalhes de cada conexão.
 
-## Desenho do Circuito Completo
+### Carregar e Executar a Simulação
+1. Insira o código `sketch.ino` no editor de código do Wokwi.
+2. Inicie a simulação e abra o Monitor Serial para visualizar as leituras dos sensores e o controle de irrigação.
+3. Teste os botões para simular diferentes níveis de nutrientes e ajuste as leituras do LDR para representar variações no pH.
 
-O projeto utiliza o ESP32 como microcontrolador e é conectado aos seguintes sensores:
-
-1. **DHT22 (Temperatura e Umidade):** Conectado ao GPIO 4.
-2. **HC-SR04 (Nível de Água):** Trigger no GPIO 5 e Echo no GPIO 18.
-3. **PIR (Movimento):** Conectado ao GPIO 14.
-4. **LDR (Luminosidade):** Conectado ao GPIO 32 (entrada analógica).
+- **Bibliotecas necessárias:** `DHT sensor library`, `PubSubClient` (instaláveis via IDE Arduino).
 
 ### Diagrama do Circuito
-
-Inclua o diagrama abaixo para conectar corretamente os sensores ao ESP32.
+O diagrama abaixo ilustra todas as conexões no circuito, orientando a configuração exata de cada sensor e componente para a simulação.
 
 ![Diagrama do Circuito](circuito_diagrama.png)
 
-## Como Configurar e Rodar o Projeto no Wokwi e ESP32
+## Testes e Verificação
+- **Verificação de Dados no Monitor Serial**: Acompanhe o fluxo de dados para confirmar leituras precisas dos sensores e o acionamento do relé.
+- **Simulação de Condições**: Ajuste os sensores para simular diferentes condições de solo e verificar como o sistema responde em tempo real.
+- **Integração com MQTT e Banco de Dados**: Verifique o envio e armazenamento de dados via MQTT para o sistema Python e confirme a persistência no banco de dados Oracle.
 
-### No Wokwi
+Esse projeto oferece uma solução prática para o monitoramento e controle inteligente da irrigação, promovendo a sustentabilidade e eficiência em ambientes agrícolas.
 
-1. Acesse o [Wokwi.com](https://wokwi.com/).
-2. Monte o circuito conforme o diagrama e insira o código-fonte disponível na pasta `/src`.
-3. Utilize o ESP32 como microcontrolador na simulação.
-4. Verifique os dados dos sensores no Monitor Serial do Wokwi para garantir que o sistema está funcionando corretamente.
+## Simule o projeto no Wokwi
 
-### Simulação no Wokwi
-
-Você pode visualizar e interagir com a simulação do projeto no Wokwi clicando no link abaixo:
-
-[![Simulação no Wokwi](circuito_diagrama.png)](https://wokwi.com/projects/413777804461865985)
-
-Clique na imagem acima ou [aqui](https://wokwi.com/projects/413777804461865985) para acessar a simulação.
-
-### No ESP32
-
-1. Abra a **IDE Arduino**.
-2. Instale as bibliotecas necessárias:
-   - `DHT sensor library` para o sensor DHT22.
-   - `Ultrasonic` para o sensor HC-SR04.
-3. Conecte o ESP32 ao computador via USB e faça o upload do código.
-4. Abra o Monitor Serial na IDE para acompanhar as leituras dos sensores em tempo real.
-
-## Instruções de Instalação e Dependências
-
-- **Bibliotecas necessárias:** `DHT sensor library`, `Ultrasonic` (instaláveis via IDE Arduino).
-- **Plataforma:** Wokwi.com ou IDE Arduino para simulações e deploy no ESP32.
-- **Hardware:** ESP32, DHT22, HC-SR04, PIR, LDR.
-
-## Contribuição e Versionamento
-
-- **Branch principal:** `main`.
-- **Branch de desenvolvimento:** `develop`.
-- Os Pull Requests devem ser criados a partir da branch `develop` e revisados por antes de serem fundidos à `main`.
+Você pode visualizar e interagir com a simulação do projeto no Wokwi clicando [aqui](https://wokwi.com/projects/413777804461865985).

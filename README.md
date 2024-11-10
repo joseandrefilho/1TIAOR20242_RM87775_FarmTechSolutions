@@ -18,16 +18,37 @@
 - <a href="https://www.linkedin.com/in/profandregodoi/">André Godoi Chiovato</a>
 
 
-## Descrição
+## Descrição do Projeto
 
-O projeto **FarmTech Solutions** foi desenvolvido com o objetivo de implementar um sistema de sensoriamento agrícola, que utiliza dados de sensores de umidade, pH e nutrientes para otimizar a irrigação e a aplicação de fertilizantes nas plantações. O sistema centraliza as informações em um banco de dados, permitindo que o produtor acompanhe, em tempo real, as condições do solo e das culturas, além de prever necessidades futuras com base nos dados históricos.
+# Projeto FarmTech Solutions
 
-O sistema foi construído com foco na gestão de dados agrícolas, abrangendo funcionalidades como:
-- **Coleta de dados dos sensores**: Armazenamento e monitoramento contínuo de leituras de sensores posicionados no campo.
-- **Gestão de culturas**: Cadastro e acompanhamento das plantações e suas respectivas necessidades de água e nutrientes.
-- **Previsão de necessidades**: Com base nos dados históricos, o sistema prevê futuras necessidades de irrigação e aplicação de fertilizantes, utilizando técnicas de regressão linear.
-- **Geração de alertas**: Notificações são geradas quando os níveis de umidade, pH ou nutrientes se encontram fora dos intervalos ideais.
+O projeto **FarmTech Solutions** visa desenvolver um sistema de monitoramento e controle inteligente para a irrigação e o manejo de culturas agrícolas, utilizando um **ESP32** e sensores simulados no ambiente [Wokwi](https://wokwi.com/). Este sistema coleta dados ambientais relevantes — como umidade do solo, níveis de nutrientes (P e K) e valores de pH — permitindo decisões automatizadas e eficientes para o controle de irrigação e aplicação de fertilizantes, promovendo o uso otimizado de recursos.
 
+## Funcionalidades
+- **Monitoramento em Tempo Real**: Coleta contínua de dados do solo, incluindo medições de umidade (sensor DHT22), pH (simulado pelo sensor LDR) e nutrientes (simulados por botões), oferecendo uma visão precisa das condições de cultivo.
+- **Controle Automatizado de Irrigação**: Acionamento de um relé para controle da bomba d’água, ajustando a quantidade de água com base nos dados coletados para manter as condições ideais do solo.
+- **Geração de Alertas**: Emissão automática de alertas quando os parâmetros do solo (umidade, pH, nutrientes) ultrapassam os limites recomendados, permitindo ajustes imediatos nas condições do cultivo.
+- **Integração com Banco de Dados e MQTT**: Transmissão dos dados via MQTT para um sistema Python, que grava as informações em um banco de dados Oracle, possibilitando consultas históricas e análises preditivas.
+- **Gestão de Culturas**: Cadastro e acompanhamento das plantações e suas necessidades específicas, permitindo que o produtor visualize dados históricos e entenda melhor as demandas de cada cultura.
+- **Previsão de Necessidades**: Análise de dados históricos para prever futuras demandas de irrigação e fertilização, proporcionando um manejo mais eficiente dos recursos agrícolas e auxiliando na tomada de decisões agronômicas.
+
+Este sistema proporciona ao produtor uma ferramenta integrada para acompanhar, em tempo real, as condições do solo e das culturas, além de garantir um uso racional de água e nutrientes.
+
+
+## Arquitetura e Tecnologias Utilizadas
+
+### Arquitetura do Sistema
+O fluxo de dados no sistema é realizado da seguinte forma:
+1. **Coleta de Dados no Circuito ESP32**: Utilizando sensores conectados ao ESP32 em uma simulação no Wokwi.
+2. **Comunicação via MQTT**: Dados são enviados do ESP32 para o sistema Python através do protocolo MQTT.
+3. **Banco de Dados Oracle**: O sistema armazena e manipula os dados em um banco de dados Oracle em nuvem.
+<!-- 4. **Análise e Visualização (Opcional)**: O sistema pode gerar dashboards e realizar análise de dados em R. -->
+
+### Tecnologias
+- **Wokwi/ESP32**: Simulação do circuito com sensores de umidade, LDR para pH, e botões para nutrientes.
+- **Paho MQTT**: Protocolo de comunicação para integração de dados.
+- **Python e Oracle SQL**: Consumo de dados e operações CRUD no banco de dados.
+<!-- - **R e Streamlit**: Análise de dados e visualização em dashboards (opcional). -->
 
 ## Estrutura de pastas
 
@@ -40,52 +61,77 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 - **README.md**: Arquivo de guia e explicação geral sobre o projeto (este que você está lendo agora).
 
 ## Como executar o projeto
-Para executar o projeto de forma completa e integrada, é importante configurar corretamente o ambiente e as dependências necessárias. Este guia irá orientá-lo em cada etapa para garantir o funcionamento ideal, desde a configuração do banco de dados até a execução local e a simulação no Wokwi. Certifique-se de seguir os passos abaixo para realizar a instalação e configurar todos os recursos que o sistema precisa.
+Para executar o projeto de forma completa e integrada, é importante configurar corretamente o ambiente e as dependências necessárias. Este guia irá orientá-lo em cada etapa para garantir o funcionamento ideal, desde a configuração do banco de dados até a execução local e a simulação no Wokwi. Certifique-se de seguir os passos abaixo para instalar e configurar todos os recursos que o sistema precisa.
 
-Abaixo estão as etapas detalhadas para preparar e executar o projeto:
-### Configurações necessárias:
+### Etapas para preparar e executar o projeto:
 
-1. **Banco de dados**:
+1. **Clone o repositório**:
+   Primeiro, faça o clone do repositório do projeto em seu ambiente local:
+   ```bash
+   git clone https://github.com/joseandrefilho/1TIAOR20242_FASE3_CAP1.git
+   cd 1TIAOR20242_FASE3_CAP1
+   ```
 
-   Para criação das tabelas necessárias para o sistema, siga as instruções do [Readme](mer/README.md)  dentro da pasta `mer`.
+2. **Configuração do Banco de Dados**:
+   Para criar as tabelas necessárias, execute os scripts SQL disponíveis na pasta `mer`:
+   - No Oracle SQL Developer, execute o script `FarmTech_SCRIPT_DDL.sql` para criar o banco de dados.
+   - Detalhes adicionais estão disponíveis no [README](mer/README.md) da pasta `mer`.
 
-2. **Configurar variáveis de ambiente**:
-
-   Crie um arquivo `.env` na raiz do projeto com as informações de acesso ao banco de dados:
+3. **Configurar variáveis de ambiente**:
+   Crie um arquivo `.env` na raiz do projeto com as credenciais de acesso ao banco de dados Oracle:
 
    ```bash
    DB_USER=seu_usuario
    DB_PASSWORD=sua_senha
    DB_DSN=seu_dsn
+   ```
 
-
-3. **Instale as dependências**:
+4. **Instale as dependências**:
+   Na raiz do projeto, instale as dependências listadas no arquivo `requirements.txt`:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Execute o projeto**:
+5. **Execute o projeto localmente**:
+   Inicie o sistema rodando o arquivo `main.py` na pasta `src`:
    ```bash
    python src/main.py
    ```
 
-5. **Execute o projeto no Wokwi**:
+6. **Execute o projeto no Wokwi**:
+   Você pode visualizar e interagir com a simulação do projeto no Wokwi clicando na imagem abaixo:
 
-Você pode visualizar e interagir com a simulação do projeto no Wokwi clicando no link abaixo:
+   [![Simulação no Wokwi](wokwi/circuito_diagrama.png)](https://wokwi.com/projects/413777804461865985)
 
-[![Simulação no Wokwi](wokwi\circuito_diagrama.png)](https://wokwi.com/projects/413777804461865985)
+   Ou clique diretamente [aqui](https://wokwi.com/projects/413777804461865985) para acessar a simulação.
+   
+Detalhes adicionais estão disponíveis no [README](mer/README.md) da pasta `wokwi`.
 
-Clique na imagem acima ou [aqui](https://wokwi.com/projects/413777804461865985) para acessar a simulação.
+## Histórico de lançamentos
+* 0.3.0 - 10/11/2024
+    * Atualização do README com instruções detalhadas para execução.
 
-## 🗃 Histórico de lançamentos
-* 0.3.0 - 16/10/2024
-    * Adição do modelo de previsão de necessidades
-* 0.2.0 - 14/10/2024
-    * Adição do MER/DER e do DDL
+* 0.2.0 - 08/11/2024
+    * Adição do MER/DER e do script DDL para criação do banco de dados Oracle.
+    * Adição de entidades no banco de dados para sensores, culturas, leituras e alertas.
+    * Integração inicial com o cliente MQTT para receber dados simulados.
+    * Criação do código para integração com o banco de dados e recepção de dados via MQTT.
+
+* 0.1.1 - 07/11/2024
+    * Revisão do README com detalhes sobre as tecnologias utilizadas.
+    * Documentação inicial sobre a configuração do ambiente.
+    * Ajustes no código para organização das pastas `src`, `mer`, e `wokwi`.
+
 * 0.1.0 - 12/10/2024
-    * Criação do MER/DER e do README.md
+    * Criação inicial do MER/DER com entidades básicas e relacionamentos.
+    * Adição do README.md com estrutura de pastas e introdução ao projeto.
+    * Criação do código base para configuração inicial do sistema.
+
 * 0.0.1 - 10/10/2024
-    * Criação do repositório e início do projeto
+    * Criação do repositório e início do desenvolvimento do projeto.
+    * Planejamento do escopo inicial e definição de objetivos.
+    * Estrutura inicial do código e organização dos arquivos do projeto.
+
 
 ## Licença
 

@@ -116,19 +116,19 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
    - A presença de dados georreferenciados facilita a geração de mapas de calor e análises espaciais de dados agrícolas.
 
 ### 3. **Sobre as Relações 1:N**
-   - As relações **1:N** entre as tabelas (ex: entre **T_CULTURA** e **T_IRRIGACAO**, ou **T_APLICACAO**) permitem o registro de múltiplos eventos de irrigação ou aplicação de produtos para a mesma cultura ao longo do tempo, refletindo a natureza repetitiva e cíclica dessas atividades no contexto de gestão agrícola.
+   - As relações **1:N** entre as tabelas (ex: entre **T_SSA_CULTURA** e **T_SSA_IRRIGACAO**, ou **T_SSA_APLICACAO**) permitem o registro de múltiplos eventos de irrigação ou aplicação de produtos para a mesma cultura ao longo do tempo, refletindo a natureza repetitiva e cíclica dessas atividades no contexto de gestão agrícola.
    - Isso assegura que o sistema possa lidar com os diferentes ciclos de manejo da cultura sem a necessidade de redundância de dados.
 
 ### 4. **Sobre a Tabela de Produtos**
-   - A tabela **T_TIPO_PRODUTO** permite adicionar novos tipos de produtos (ex: fertilizantes, pesticidas) de maneira modular, sem a necessidade de modificar a estrutura do modelo. Isso facilita a manutenção do sistema conforme novos insumos forem introduzidos ou adotados na agricultura.
+   - A tabela **T_SSA_TIPO_PRODUTO** permite adicionar novos tipos de produtos (ex: fertilizantes, pesticidas) de maneira modular, sem a necessidade de modificar a estrutura do modelo. Isso facilita a manutenção do sistema conforme novos insumos forem introduzidos ou adotados na agricultura.
    - A tabela também permite associar a unidade de medida correta para cada tipo de produto, promovendo a padronização e a consistência nos registros de quantidade aplicada.
 
 ### 5. **Sobre a Possibilidade de Campos Opcionais**
-   - Alguns campos, como a `dt_plantio` na tabela **T_CULTURA**, são opcionais. Isso permite o registro de culturas ainda não plantadas, facilitando a inserção de dados em planejamentos antecipados ou em situações onde a data de plantio não é imediata.
+   - Alguns campos, como a `dt_plantio` na tabela **T_SSA_CULTURA**, são opcionais. Isso permite o registro de culturas ainda não plantadas, facilitando a inserção de dados em planejamentos antecipados ou em situações onde a data de plantio não é imediata.
    - A flexibilidade de campos opcionais permite um registro gradual e dinâmico dos dados agrícolas, acomodando a variabilidade do processo de plantio.
 
 ### 6. **Sobre a Unidade de Medida nos Produtos**
-   - A unidade de medida associada aos produtos na tabela **T_TIPO_PRODUTO** garante a padronização dos valores aplicados. Isso assegura que as quantidades de insumos como fertilizantes, pesticidas e água sejam registradas de forma consistente e correta, facilitando a análise posterior.
+   - A unidade de medida associada aos produtos na tabela **T_SSA_TIPO_PRODUTO** garante a padronização dos valores aplicados. Isso assegura que as quantidades de insumos como fertilizantes, pesticidas e água sejam registradas de forma consistente e correta, facilitando a análise posterior.
    - A presença de unidades de medida específicas para cada produto facilita a compatibilidade dos dados com relatórios e ferramentas de análise externas.
 
 ---
@@ -168,7 +168,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ### Tabela: `T_SSA_ALERTAS`
 
-| Tabela (ENTIDADE)         | `T_ALERTAS` |
+| Tabela (ENTIDADE)         | `T_SSA_ALERTAS` |
 |---------------------------|-------------|
 | **Descrição**             | Armazena os alertas gerados com base nas leituras dos sensores. |
 | **Volume esperado**       | Crescimento conforme número de sensores ativos. |
@@ -186,7 +186,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ### Tabela: `T_SSA_APLICACAO`
 
-| Tabela (ENTIDADE)         | `T_APLICACAO` |
+| Tabela (ENTIDADE)         | `T_SSA_APLICACAO` |
 |---------------------------|---------------|
 | **Descrição**             | Armazena informações sobre as aplicações de produtos nas culturas. |
 | **Volume esperado**       | Crescimento conforme o número de culturas e produtos aplicados. |
@@ -205,7 +205,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ### Tabela: `T_SSA_CULTURA`
 
-| Tabela (ENTIDADE)         | `T_CULTURA` |
+| Tabela (ENTIDADE)         | `T_SSA_CULTURA` |
 |---------------------------|-------------|
 | **Descrição**             | Armazena informações sobre as culturas plantadas. |
 | **Volume esperado**       | Carga inicial de 1 registro, crescimento conforme novas culturas. |
@@ -223,7 +223,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ### Tabela: `T_SSA_IRRIGACAO`
 
-| Tabela (ENTIDADE)         | `T_IRRIGACAO` |
+| Tabela (ENTIDADE)         | `T_SSA_IRRIGACAO` |
 |---------------------------|---------------|
 | **Descrição**             | Armazena os eventos de irrigação das culturas. |
 | **Volume esperado**       | Crescimento conforme o número de eventos de irrigação. |
@@ -241,7 +241,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ### Tabela: `T_SSA_LEITURA`
 
-| Tabela (ENTIDADE)         | `T_LEITURA` |
+| Tabela (ENTIDADE)         | `T_SSA_LEITURA` |
 |---------------------------|-------------|
 | **Descrição**             | Armazena as leituras realizadas pelos sensores. |
 | **Volume esperado**       | Crescimento diário conforme número de sensores ativos. |
@@ -259,7 +259,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ### Tabela: `T_SSA_SENSOR`
 
-| Tabela (ENTIDADE)         | `T_SENSOR` |
+| Tabela (ENTIDADE)         | `T_SSA_SENSOR` |
 |---------------------------|------------|
 | **Descrição**             | Armazena informações sobre os sensores utilizados para monitoramento das condições do solo. |
 | **Volume esperado**       |  Carga inicial de 5 registros, crescimento conforme aumento de sensores. |
@@ -279,7 +279,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ### Tabela: `T_SSA_TIPO_PRODUTO`
 
-| Tabela (ENTIDADE)         | `T_TIPO_PRODUTO` |
+| Tabela (ENTIDADE)         | `T_SSA_TIPO_PRODUTO` |
 |---------------------------|------------------|
 | **Descrição**             | Armazena os tipos de produtos aplicados nas culturas, como fertilizantes, pesticidas e água. |
 | **Volume esperado**       | Carga inicial de 5 registros, crescimento conforme novos tipos de produtos. |
@@ -297,8 +297,8 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 ## Estrutura de Arquivos
 Nesta pasta, você encontrará os seguintes arquivos:
 - **FarmTech_SCRIPT_DDL.sql**: Script SQL gerado pelo **Oracle SQL Developer Data Modeler** contendo a criação das tabelas e seus relacionamentos.
-- **FarmTech_DER_OracleSQLDeveloperDataModeler.png**: Imagem do Diagrama Entidade-Relacionamento (DER) gerado pelo **Oracle SQL Developer Data Modeler**.
-- **FarmTech_MER_OracleSQLDeveloperDataModeler.png**: Imagem do Modelo Entidade-Relacionamento (MER).
+- **FarmTech_DER_Relational.png**: Imagem do Diagrama Entidade-Relacionamento (DER) gerado pelo **Oracle SQL Developer Data Modeler**.
+- **FarmTech_MER_Logical.png**: Imagem do Modelo Entidade-Relacionamento (MER).
 - **FarmTech_SCRIPT_SampleData.sql**: Script SQL contendo os dados iniciais para execução do projeto.
 - **README.md**: O README inclui todas as informações necessárias para compreender o projeto, desde o objetivo até as consultas SQL.
   
