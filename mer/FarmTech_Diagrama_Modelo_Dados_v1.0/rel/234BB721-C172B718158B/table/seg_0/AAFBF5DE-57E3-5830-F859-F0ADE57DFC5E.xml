@@ -1,0 +1,100 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="AAFBF5DE-57E3-5830-F859-F0ADE57DFC5E" name="T_SSA_ALERTAS">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Armazena os alertas gerados com base nas leituras dos sensores.]]></comment>
+<commentInRDBMS><![CDATA[Armazena os alertas gerados com base nas leituras dos sensores.]]></commentInRDBMS>
+<generatorID>1E26ABBB-3E4A-106B-472B-4E2837344935</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<abbreviation>T_ALERTAS</abbreviation>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="cd_alerta" id="D9CD7FF3-4A7E-AA0A-9094-E3F7E3A6C0DB">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Código único do alerta.]]></comment>
+<commentInRDBMS><![CDATA[Código único do alerta.]]></commentInRDBMS>
+<generatorID>E027E1F1-DFC6-D043-03BE-D5A52A76D884</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="ds_tipo" id="37C7E7EC-A06E-A672-48E0-14BAFC48D092">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Tipo de alerta (umidade baixa, pH fora do normal).]]></comment>
+<commentInRDBMS><![CDATA[Tipo de alerta (umidade baixa, pH fora do normal).]]></commentInRDBMS>
+<generatorID>76E4C525-7C41-AEC5-BCAF-A06154953325</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>200 CHAR</dataTypeSize>
+<ownDataTypeParameters>200 CHAR,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="dt_alerta" id="DC1D101E-FD65-129F-0B16-8AE9249F1B69">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Data e hora do alerta.]]></comment>
+<commentInRDBMS><![CDATA[Data e hora do alerta.]]></commentInRDBMS>
+<generatorID>1C6FE21B-F841-5D5A-EC00-554148D846AE</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="cd_sensor" id="28113603-63C0-C837-EF95-553CBC2C9445">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Referencia o sensor que gerou o alerta.]]></comment>
+<commentInRDBMS><![CDATA[Referencia o sensor que gerou o alerta.]]></commentInRDBMS>
+<generatorID>F469C498-8757-7866-C521-A9DB14D81B9F</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="2B652E51-7F2B-95AA-A5BB-626260F8624D" referredColumn="EA67E967-F1E3-6866-E816-01893EB1C6CE"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="7D3FBBDA-AC58-1739-E418-950B75213F29" name="PK_T_ALERTAS">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<generatorID>29614DB9-5686-9DE2-E19A-27D688458CD4</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="D9CD7FF3-4A7E-AA0A-9094-E3F7E3A6C0DB"/>
+<colUsage columnID="28113603-63C0-C837-EF95-553CBC2C9445"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="1BEC85CB-7FF3-189D-927C-D1D41A538AC5" name="FK_T_ALERTAS_T_SENSOR">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<generatorID>401F6ED1-CA43-A547-0039-DDBFCDBE5085</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="28113603-63C0-C837-EF95-553CBC2C9445"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

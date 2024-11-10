@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="2B652E51-7F2B-95AA-A5BB-626260F8624D" containerWithKeyObject="AAFBF5DE-57E3-5830-F859-F0ADE57DFC5E" localFKIndex="1BEC85CB-7FF3-189D-927C-D1D41A538AC5" name="FK_T_ALERTAS_T_SENSOR">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<generatorID>401F6ED1-CA43-A547-0039-DDBFCDBE5085</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<referredTableLongName>T_SSA_SENSOR</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>62DAA21A-1771-D191-4094-D06255C5A286</referredTableID>
+<keyObject>4B7D92E1-51DE-5141-B099-391AF6098033</keyObject>
+<referredKeyID>4B7D92E1-51DE-5141-B099-391AF6098033</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>cd_sensor</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>
