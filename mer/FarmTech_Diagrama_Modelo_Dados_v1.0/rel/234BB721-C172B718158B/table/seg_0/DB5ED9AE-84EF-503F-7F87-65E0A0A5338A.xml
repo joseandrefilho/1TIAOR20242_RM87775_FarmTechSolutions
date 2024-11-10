@@ -1,0 +1,101 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="DB5ED9AE-84EF-503F-7F87-65E0A0A5338A" name="T_SSA_CULTURA">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Armazena informações sobre as culturas plantadas]]></comment>
+<commentInRDBMS><![CDATA[Armazena informações sobre as culturas plantadas]]></commentInRDBMS>
+<generatorID>7D476DC2-DFB1-B7BC-CB5B-BD41685BE22D</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<abbreviation>T_CULTURA</abbreviation>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="cd_cultura" id="7102F565-A9C7-1FCA-A0A9-C9C869573708">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Código único da cultura.]]></comment>
+<commentInRDBMS><![CDATA[Código único da cultura.]]></commentInRDBMS>
+<generatorID>99507CE9-4CC6-E034-1BC4-ACF9222B1C38</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="nm_cultura" id="9360DA77-306F-5736-D5F5-AFE32BB7DE2E">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Nome da cultura.]]></comment>
+<commentInRDBMS><![CDATA[Nome da cultura.]]></commentInRDBMS>
+<generatorID>85AF227E-BB12-C244-F7DA-608AE5EF305E</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>100 CHAR</dataTypeSize>
+<ownDataTypeParameters>100 CHAR,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="dt_plantio" id="50992921-50AE-4DE8-6CD6-7FED78583DC2">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Data de plantio da cultura.]]></comment>
+<commentInRDBMS><![CDATA[Data de plantio da cultura.]]></commentInRDBMS>
+<generatorID>9E345013-DBC6-1D00-7AA7-9E44F59BE75C</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT008</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="vl_area_cultivo" id="B39DE222-2281-E2E7-C623-BAC75F0C7F81">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Área de cultivo.]]></comment>
+<commentInRDBMS><![CDATA[Área de cultivo.]]></commentInRDBMS>
+<generatorID>4EB6837B-810C-B154-F086-9DFB579AF9A0</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT026</logicalDatatype>
+<dataTypePrecision>10</dataTypePrecision>
+<dataTypeScale>2</dataTypeScale>
+<checkConstraint>
+<implementationDef dbType="Generic Constraint" definition="vl_area_cultivo &gt; 0"/>
+</checkConstraint>
+<ownDataTypeParameters>,10,2</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="76306B1B-0E8E-0CF7-584A-45C72728EC68" name="PK_T_CULTURA">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<generatorID>8DB9D357-3923-91A6-EF39-E79EAEC2DEFF</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7102F565-A9C7-1FCA-A0A9-C9C869573708"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="FBE05BF8-0DF0-A4A8-4D60-83507752679B" name="UN_T_CULTURA_nm_cultura">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<generatorID>8703C6F8-3A9C-0ECA-DC8A-3772A4C2536D</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9360DA77-306F-5736-D5F5-AFE32BB7DE2E"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

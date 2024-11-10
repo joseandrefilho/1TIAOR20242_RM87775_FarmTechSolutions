@@ -1,0 +1,102 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="BFAE6401-D5A1-8D92-AE0F-8F217D63EAC9" name="T_SSA_LEITURA">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Armazena as leituras realizadas pelos sensores.]]></comment>
+<commentInRDBMS><![CDATA[Armazena as leituras realizadas pelos sensores.]]></commentInRDBMS>
+<generatorID>8BD70472-60FE-D6CF-CBB6-6BDF6206FCF8</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<abbreviation>T_LEITURA</abbreviation>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="cd_leitura" id="46EB6371-C322-03DE-FC24-197CA06700AB">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Código único da leitura.]]></comment>
+<commentInRDBMS><![CDATA[Código único da leitura.]]></commentInRDBMS>
+<generatorID>50E85D0B-5DEC-61C5-651D-4495D46168A5</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="dt_leitura" id="930652A4-D403-9F53-B27D-1C8D359673F6">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Referencia o sensor que realizou a leitura.]]></comment>
+<commentInRDBMS><![CDATA[Data e hora da leitura.]]></commentInRDBMS>
+<generatorID>752D763D-50F7-3DE5-E299-12F5129A8B6C</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<defaultValue>CURRENT_TIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="vl_valor_leitura" id="AE54FD67-2D53-6813-A2CA-04185ED8EF0C">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Valor da leitura (umidade, pH, nutrientes).]]></comment>
+<commentInRDBMS><![CDATA[Valor da leitura (umidade, pH, nutrientes).]]></commentInRDBMS>
+<generatorID>D9C3D4D9-FFE7-8BA9-1FDF-E84E75C89F05</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT026</logicalDatatype>
+<dataTypePrecision>10</dataTypePrecision>
+<dataTypeScale>2</dataTypeScale>
+<ownDataTypeParameters>,10,2</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="cd_sensor" id="633E20A7-0931-6666-BE05-0C661BE12A1C">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<comment><![CDATA[Referencia o sensor que realizou a leitura.]]></comment>
+<commentInRDBMS><![CDATA[Referencia o sensor que realizou a leitura.]]></commentInRDBMS>
+<generatorID>B57DCFD8-F10F-8A02-1E7C-8C533438FAB5</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="A581B65E-D096-8D33-4D92-03B9AB7E4F5B" referredColumn="EA67E967-F1E3-6866-E816-01893EB1C6CE"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="F9F130DC-E14C-6ED2-5A47-2DC224F6A2D2" name="PK_T_LEITURA">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<generatorID>9AB4F52E-39D6-4A56-7B44-A2D1EB5FE76E</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="46EB6371-C322-03DE-FC24-197CA06700AB"/>
+<colUsage columnID="633E20A7-0931-6666-BE05-0C661BE12A1C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="85355F47-203E-0685-0282-312690701EC7" name="FK_T_LEITURA_T_SENSOR">
+<createdBy>josea</createdBy>
+<createdTime>2024-11-10 13:55:42 UTC</createdTime>
+<generatorID>8C6C77FC-2144-41F9-05A2-01858D1B4197</generatorID>
+<ownerDesignName>FarmTech_Diagrama_Modelo_Dados_v1.0</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="633E20A7-0931-6666-BE05-0C661BE12A1C"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>
