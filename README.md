@@ -45,7 +45,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 1. **Banco de dados**:
 
-   O sistema cria automaticamente as tabelas necessárias no banco de dados Oracle ao ser executado pela primeira vez. Não é necessário criar as tabelas manualmente. Certifique-se de que as informações de conexão com o banco de dados estão corretas no arquivo `.env`.
+   Para criação das tabelas necessárias para o sistema, siga as instruções do [Readme](mer/README.md)  dentro da pasta `mer`.
 
 2. **Configurar variáveis de ambiente**:
 
@@ -65,6 +65,14 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
    ```bash
    python src/main.py
    ```
+
+5. **Execute o projeto no Wokwi**:
+
+Você pode visualizar e interagir com a simulação do projeto no Wokwi clicando no link abaixo:
+
+[![Simulação no Wokwi](circuito_diagrama.png)](https://wokwi.com/projects/413777804461865985)
+
+Clique na imagem acima ou [aqui](https://wokwi.com/projects/413777804461865985) para acessar a simulação.
 
 ## 🗃 Histórico de lançamentos
 * 0.3.0 - 16/10/2024

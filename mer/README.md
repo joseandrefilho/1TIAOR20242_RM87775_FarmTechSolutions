@@ -28,15 +28,15 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 - **GitHub**: Hospedagem dos arquivos `.sql`, `.xml`, `.dmd` e `.md`.
 
 ## Diagrama Entidade-Relacionamento (MER)
-![MER do Banco de Dados Agrícola](FarmTech_MER_OracleSQLDeveloperDataModeler.png)
+![MER do Banco de Dados Agrícola](FarmTech_MER_Logical.png)
 
 ## Diagrama do Modelo Relacional
-![MER do Banco de Dados Agrícola](FarmTech_DER_OracleSQLDeveloperDataModeler.png)
+![MER do Banco de Dados Agrícola](FarmTech_DER_Relational.png)
 
 
 ### Entidades e Atributos:
 
-#### 1. **CULTURA**
+#### 1. **T_SSA_CULTURA**
    - **Descrição**: Armazena informações sobre as culturas plantadas.
    - **Campos**:
      - `cd_cultura` (INT, Primary Key) — Código único da cultura.
@@ -44,7 +44,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
      - `dt_plantio` (DATETIME) — Data de plantio da cultura (opcional).
      - `vl_area_cultivo` (DECIMAL(10,2)) — Área de cultivo.
 
-#### 2. **SENSOR**
+#### 2. **T_SSA_SENSOR**
    - **Descrição**: Armazena informações sobre os sensores utilizados para monitoramento das condições do solo.
    - **Campos**:
      - `cd_sensor` (INT, Primary Key) — Código único do sensor.
@@ -54,7 +54,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
      - `vl_longitude_sensor` (DECIMAL(9,6)) — Longitude da localização do sensor (constraint CHECK: deve estar entre -180 e 180).
      - `cd_cultura` (INT, Foreign Key) — Referencia a cultura monitorada pelo sensor.
 
-#### 3. **LEITURA**
+#### 3. **T_SSA_LEITURA**
    - **Descrição**: Armazena as leituras realizadas pelos sensores.
    - **Campos**:
      - `cd_leitura` (INT, Primary Key) — Código único da leitura.
@@ -62,7 +62,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
      - `vl_valor_leitura` (DECIMAL(10,2)) — Valor da leitura (umidade, pH, nutrientes).
      - `cd_sensor` (INT, Foreign Key) — Referencia o sensor que realizou a leitura.
 
-#### 4. **ALERTAS**
+#### 4. **T_SSA_ALERTAS**
    - **Descrição**: Armazena os alertas gerados com base nas leituras dos sensores.
    - **Campos**:
      - `cd_alerta` (INT, Primary Key) — Código único do alerta.
@@ -70,14 +70,14 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
      - `dt_alerta` (DATETIME) — Data e hora do alerta.
      - `cd_sensor` (INT, Foreign Key) — Referencia o sensor que gerou o alerta.
 
-#### 5. **TIPO_PRODUTO**
+#### 5. **T_SSA_TIPO_PRODUTO**
    - **Descrição**: Armazena os tipos de produtos aplicados nas culturas, como fertilizantes, pesticidas e água.
    - **Campos**:
      - `cd_tipo_produto` (INT, Primary Key) — Código único do tipo de produto.
      - `ds_tipo_produto` (VARCHAR(100)) — Descrição do tipo de produto.
      - `ds_unidade_medida` (VARCHAR(20)) — Unidade de medida padrão (litros, quilos, etc.).
 
-#### 6. **APLICACAO**
+#### 6. **T_SSA_APLICACAO**
    - **Descrição**: Armazena informações sobre as aplicações de produtos nas culturas.
    - **Campos**:
      - `cd_aplicacao` (INT, Primary Key) — Código único da aplicação.
@@ -86,7 +86,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
      - `cd_cultura` (INT, Foreign Key) — Referencia a cultura que recebeu a aplicação.
      - `cd_tipo_produto` (INT, Foreign Key) — Referencia o tipo de produto aplicado.
 
-#### 7. **IRRIGACAO**
+#### 7. **T_SSA_IRRIGACAO**
    - **Descrição**: Armazena os eventos de irrigação das culturas.
    - **Campos**:
      - `cd_irrigacao` (INT, Primary Key) — Código único da irrigação.
@@ -96,12 +96,12 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ### Relacionamentos:
 
-- **T_CULTURA** 1:N com **T_SENSOR**: Uma cultura pode ter vários sensores monitorando suas condições.
-- **T_SENSOR** 1:N com **T_LEITURA**: Um sensor pode realizar várias leituras ao longo do tempo.
-- **T_SENSOR** 1:N com **T_ALERTAS**: Um sensor pode gerar vários alertas ao longo do tempo.
-- **T_CULTURA** 1:N com **T_APLICACAO**: Uma cultura pode receber várias aplicações de produtos ao longo do tempo.
-- **T_CULTURA** 1:N com **T_IRRIGACAO**: Uma cultura pode ser irrigada várias vezes.
-- **T_TIPO_PRODUTO** 1:N com **T_APLICACAO**: Um tipo de produto pode ser aplicado em várias culturas.
+- **T_SSA_CULTURA** 1:N com **T_SSA_SENSOR**: Uma cultura pode ter vários sensores monitorando suas condições.
+- **T_SSA_SENSOR** 1:N com **T_SSA_LEITURA**: Um sensor pode realizar várias leituras ao longo do tempo.
+- **T_SSA_SENSOR** 1:N com **T_SSA_ALERTAS**: Um sensor pode gerar vários alertas ao longo do tempo.
+- **T_SSA_CULTURA** 1:N com **T_SSA_APLICACAO**: Uma cultura pode receber várias aplicações de produtos ao longo do tempo.
+- **T_SSA_CULTURA** 1:N com **T_SSA_IRRIGACAO**: Uma cultura pode ser irrigada várias vezes.
+- **T_SSA_TIPO_PRODUTO** 1:N com **T_SSA_APLICACAO**: Um tipo de produto pode ser aplicado em várias culturas.
 
 ---
 
@@ -136,29 +136,29 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 ## Constraints Definidas no Sistema
 
 ### 1. **Unique Constraint no Nome da Cultura**
-   - **Tabela**: `T_CULTURA`
+   - **Tabela**: `T_SSA_CULTURA`
    - **Campo**: `nm_cultura`
    - **Regra**: O nome da cultura deve ser único, garantindo que não existam duas culturas com o mesmo nome.
    
 ### 2. **Check Constraint para Quantidade Aplicada**
-   - **Tabela**: `T_APLICACAO`
+   - **Tabela**: `T_SSA_APLICACAO`
    - **Campo**: `vl_quantidade_aplicada`
    - **Regra**: A quantidade aplicada deve ser maior que 0.
 
 ### 3. **Check Constraint para Latitude e Longitude dos Sensores**
-   - **Tabela**: `T_SENSOR`
+   - **Tabela**: `T_SSA_SENSOR`
    - **Campos**: `vl_latitude_sensor`, `vl_longitude_sensor`
    - **Regras**:
      - A latitude deve estar no intervalo entre -90 e 90.
      - A longitude deve estar no intervalo entre -180 e 180.
 
 ### 4. **Unique Constraint no Nome do Sensor**
-   - **Tabela**: `T_SENSOR`
+   - **Tabela**: `T_SSA_SENSOR`
    - **Campo**: `nm_sensor`
    - **Regra**: O nome do sensor deve ser único, garantindo que não existam dois sensores com o mesmo nome.
 
 ### 5. **Default Constraint para Definir Data Atual como Valor Padrão**
-   - **Tabela**: `T_LEITURA`
+   - **Tabela**: `T_SSA_LEITURA`
    - **Campo**: `dt_leitura`
    - **Regra**: A data de leitura será definida como a data e hora atuais (`CURRENT_TIMESTAMP`) por padrão.
 
@@ -166,7 +166,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ## Dicionário de Dados
 
-### Tabela: `T_ALERTAS`
+### Tabela: `T_SSA_ALERTAS`
 
 | Tabela (ENTIDADE)         | `T_ALERTAS` |
 |---------------------------|-------------|
@@ -184,7 +184,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ---
 
-### Tabela: `T_APLICACAO`
+### Tabela: `T_SSA_APLICACAO`
 
 | Tabela (ENTIDADE)         | `T_APLICACAO` |
 |---------------------------|---------------|
@@ -203,7 +203,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ---
 
-### Tabela: `T_CULTURA`
+### Tabela: `T_SSA_CULTURA`
 
 | Tabela (ENTIDADE)         | `T_CULTURA` |
 |---------------------------|-------------|
@@ -221,7 +221,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ---
 
-### Tabela: `T_IRRIGACAO`
+### Tabela: `T_SSA_IRRIGACAO`
 
 | Tabela (ENTIDADE)         | `T_IRRIGACAO` |
 |---------------------------|---------------|
@@ -239,7 +239,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ---
 
-### Tabela: `T_LEITURA`
+### Tabela: `T_SSA_LEITURA`
 
 | Tabela (ENTIDADE)         | `T_LEITURA` |
 |---------------------------|-------------|
@@ -257,7 +257,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ---
 
-### Tabela: `T_SENSOR`
+### Tabela: `T_SSA_SENSOR`
 
 | Tabela (ENTIDADE)         | `T_SENSOR` |
 |---------------------------|------------|
@@ -277,7 +277,7 @@ O objetivo do MER/DER é modelar de forma clara as entidades envolvidas no proce
 
 ---
 
-### Tabela: `T_TIPO_PRODUTO`
+### Tabela: `T_SSA_TIPO_PRODUTO`
 
 | Tabela (ENTIDADE)         | `T_TIPO_PRODUTO` |
 |---------------------------|------------------|
@@ -299,6 +299,7 @@ Nesta pasta, você encontrará os seguintes arquivos:
 - **FarmTech_SCRIPT_DDL.sql**: Script SQL gerado pelo **Oracle SQL Developer Data Modeler** contendo a criação das tabelas e seus relacionamentos.
 - **FarmTech_DER_OracleSQLDeveloperDataModeler.png**: Imagem do Diagrama Entidade-Relacionamento (DER) gerado pelo **Oracle SQL Developer Data Modeler**.
 - **FarmTech_MER_OracleSQLDeveloperDataModeler.png**: Imagem do Modelo Entidade-Relacionamento (MER).
+- **FarmTech_SCRIPT_SampleData.sql**: Script SQL contendo os dados iniciais para execução do projeto.
 - **README.md**: O README inclui todas as informações necessárias para compreender o projeto, desde o objetivo até as consultas SQL.
   
 ## Instruções para Uso
