@@ -14,7 +14,7 @@ class Sensor:
     def read_all(cls) -> List['Sensor']:
         with DBConnection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT cd_sensor, nm_sensor, ds_tipo_sensor, vl_latitude_sensor, vl_longitude_sensor, cd_cultura FROM t_sensor")
+            cursor.execute("SELECT cd_sensor, nm_sensor, ds_tipo_sensor, vl_latitude_sensor, vl_longitude_sensor, cd_cultura FROM t_ssa_sensor")
             rows = cursor.fetchall()
             return [cls(*row) for row in rows]
 
@@ -22,7 +22,7 @@ class Sensor:
     def read_by_id(cls, cd_sensor: int) -> Optional['Sensor']:
         with DBConnection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT cd_sensor, nm_sensor, ds_tipo_sensor, vl_latitude_sensor, vl_longitude_sensor, cd_cultura FROM t_sensor WHERE cd_sensor = :cd_sensor", [cd_sensor])
+            cursor.execute("SELECT cd_sensor, nm_sensor, ds_tipo_sensor, vl_latitude_sensor, vl_longitude_sensor, cd_cultura FROM t_ssa_sensor WHERE cd_sensor = :cd_sensor", [cd_sensor])
             row = cursor.fetchone()
             return cls(*row) if row else None
     
@@ -30,6 +30,6 @@ class Sensor:
     def get_by_name(cls, nm_sensor: str) -> Optional['Sensor']:
         with DBConnection() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT cd_sensor, nm_sensor, ds_tipo_sensor, vl_latitude_sensor, vl_longitude_sensor, cd_cultura FROM t_sensor WHERE nm_sensor = :nm_sensor", [nm_sensor])
+            cursor.execute("SELECT cd_sensor, nm_sensor, ds_tipo_sensor, vl_latitude_sensor, vl_longitude_sensor, cd_cultura FROM t_ssa_sensor WHERE nm_sensor = :nm_sensor", [nm_sensor])
             row = cursor.fetchone()
             return cls(*row) if row else None

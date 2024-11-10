@@ -13,7 +13,7 @@ class Leitura:
         with DBConnection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                INSERT INTO t_leitura (cd_leitura, dt_leitura, vl_valor_leitura, cd_sensor)
+                INSERT INTO t_ssa_leitura (cd_leitura, dt_leitura, vl_valor_leitura, cd_sensor)
                 VALUES (t_leitura_cd_leitura_seq.nextval, CURRENT_TIMESTAMP, :vl_valor_leitura, :cd_sensor)
             """, [vl_valor_leitura, cd_sensor])
             conn.commit()
@@ -23,7 +23,7 @@ class Leitura:
             cd_leitura = cursor.fetchone()[0]
             
             # Recupera a data e hora da leitura recém-criada
-            cursor.execute("SELECT dt_leitura FROM t_leitura WHERE cd_leitura = :cd_leitura", [cd_leitura])
+            cursor.execute("SELECT dt_leitura FROM t_ssa_leitura WHERE cd_leitura = :cd_leitura", [cd_leitura])
             dt_leitura = cursor.fetchone()[0]
             
             return cls(cd_leitura, dt_leitura, vl_valor_leitura, cd_sensor)

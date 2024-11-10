@@ -13,7 +13,7 @@ class Irrigacao:
         with DBConnection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                INSERT INTO t_irrigacao (cd_irrigacao, dt_irrigacao, vl_quantidade_agua_aplicada, cd_cultura)
+                INSERT INTO t_ssa_irrigacao (cd_irrigacao, dt_irrigacao, vl_quantidade_agua_aplicada, cd_cultura)
                 VALUES (t_irrigacao_cd_irrigacao_seq.nextval, CURRENT_TIMESTAMP, :vl_quantidade_agua_aplicada, :cd_cultura)
             """, [vl_quantidade_agua_aplicada, cd_cultura])
             conn.commit()
@@ -23,7 +23,7 @@ class Irrigacao:
             cd_irrigacao = cursor.fetchone()[0]
             
             # Recupera a data e hora da irrigação recém-criada
-            cursor.execute("SELECT dt_irrigacao FROM t_irrigacao WHERE cd_irrigacao = :cd_irrigacao", [cd_irrigacao])
+            cursor.execute("SELECT dt_irrigacao FROM t_ssa_irrigacao WHERE cd_irrigacao = :cd_irrigacao", [cd_irrigacao])
             dt_irrigacao = cursor.fetchone()[0]
             
             return cls(cd_irrigacao, dt_irrigacao, vl_quantidade_agua_aplicada, cd_cultura)
