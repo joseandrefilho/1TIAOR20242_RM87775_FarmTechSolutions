@@ -107,6 +107,13 @@ Para executar o projeto de forma completa e integrada, é importante configurar 
    
 Detalhes adicionais estão disponíveis no [README](mer/README.md) da pasta `wokwi`.
 
+## Vídeo de Apresentação
+
+O vídeo de apresentação do projeto está disponível no YouTube, no link abaixo:
+
+[![Vídeo de Apresentação](https://img.youtube.com/vi/oRkBaxGQaf0/0.jpg)](https://www.youtube.com/watch?v=oRkBaxGQaf0)
+
+
 ## Histórico de lançamentos
 * 0.3.0 - 10/11/2024
     * Atualização do README com instruções detalhadas para execução.
