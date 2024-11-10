@@ -74,7 +74,7 @@ Para executar o projeto de forma completa e integrada, é importante configurar 
 
 2. **Configuração do Banco de Dados**:
    Para criar as tabelas necessárias, execute os scripts SQL disponíveis na pasta `mer`:
-   - No Oracle SQL Developer, execute o script `FarmTech_SCRIPT_DDL.sql` para criar o banco de dados.
+   - No Oracle SQL Developer, execute o script `FarmTech_SCRIPT_DDL.sql` para criar o banco de dados e `FarmTech_SCRIPT_SampleData.sql` para inclusão dos registros iniciais de cultura e sensores.
    - Detalhes adicionais estão disponíveis no [README](mer/README.md) da pasta `mer`.
 
 3. **Configurar variáveis de ambiente**:
