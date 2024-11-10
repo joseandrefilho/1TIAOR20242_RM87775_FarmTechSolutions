@@ -27,10 +27,16 @@ Este sistema é projetado para promover a **gestão inteligente da água** em am
 
 ## Sensores e Componentes Utilizados
 
-1. **DHT22 (Umidade e Temperatura)** - Conectado ao GPIO 4.
-2. **LDR (Intensidade de Luz, representando pH)** - Conectado ao GPIO 32.
-3. **Botões (Nutrientes P e K)** - Conectados a GPIOs específicos para simular dados de nutrientes.
-4. **Relé (Controle de Irrigação)** - Conectado a um GPIO para ativar ou desativar a irrigação.
+| Componente         | Função                               | Pino GPIO |
+|--------------------|--------------------------------------|-----------|
+| **DHT22**          | Sensor de umidade e temperatura      | 4         |
+| **LDR**            | Simulação do sensor de pH            | 34        |
+| **Botão Nutriente P** | Representa presença do nutriente P | 12        |
+| **Botão Nutriente K** | Representa presença do nutriente K | 14        |
+| **LED Nutriente P** | Indica necessidade do nutriente P   | 26        |
+| **LED Nutriente K** | Indica necessidade do nutriente K   | 27        |
+| **Relé de Irrigação** | Controle da bomba de irrigação     | 22        |
+| **LED Relé**       | Indica estado do relé de irrigação   | 21        |
 
 ### Substituição de Sensores
 - **Nutrientes P e K**: Em vez de sensores de nutrientes específicos, usamos dois botões, onde cada um representa a presença ou ausência do nutriente.
@@ -57,6 +63,21 @@ Este sistema é projetado para promover a **gestão inteligente da água** em am
 O diagrama abaixo ilustra todas as conexões no circuito, orientando a configuração exata de cada sensor e componente para a simulação.
 
 ![Diagrama do Circuito](circuito_diagrama.png)
+
+## Lógica de Controle de Irrigação
+
+O sistema utiliza uma função de controle que decide automaticamente quando ativar a irrigação com base nas seguintes condições:
+
+1. **Umidade do Solo**: A irrigação é ativada se a umidade do solo estiver abaixo de 50%, indicando condições secas.
+2. **Nutrientes**: A irrigação é ativada se faltar algum dos nutrientes essenciais:
+   - **Nutriente P (Fósforo)**: Se necessário, a irrigação é ativada para melhorar a disponibilidade do nutriente.
+   - **Nutriente K (Potássio)**: Da mesma forma, a falta de potássio aciona a irrigação.
+3. **pH do Solo**: O sistema verifica se o pH está dentro da faixa ideal de 5,0 a 7,0. Se o pH estiver fora desse intervalo, a irrigação é ativada para ajudar a regular as condições do solo.
+4. **Temperatura**:
+   - A irrigação é ativada se a temperatura ambiente estiver acima de 30°C, indicando alta evapotranspiração, ou se estiver abaixo de 10°C, quando é necessária para ajudar na regulação térmica do solo.
+
+Essas regras ajudam a garantir que a irrigação ocorra de forma precisa e sustentável, atendendo às necessidades da cultura com base em condições ambientais monitoradas em tempo real.
+
 
 ## Testes e Verificação
 - **Verificação de Dados no Monitor Serial**: Acompanhe o fluxo de dados para confirmar leituras precisas dos sensores e o acionamento do relé.
