@@ -17,7 +17,7 @@
       "id": "btn2",
       "top": 73.4,
       "left": -297.6,
-      "attrs": { "color": "green" }
+      "attrs": { "color": "green", "bounce": "1" }
     },
     {
       "type": "wokwi-photoresistor-sensor",
@@ -32,7 +32,7 @@
       "top": 79.8,
       "left": 219.9,
       "rotate": 90,
-      "attrs": { "humidity": "52.5", "temperature": "24" }
+      "attrs": { "humidity": "78", "temperature": "28.3" }
     },
     { "type": "wokwi-relay-module", "id": "relay1", "top": -201.4, "left": 201.6, "attrs": {} },
     {
@@ -54,7 +54,7 @@
     {
       "type": "wokwi-resistor",
       "id": "r2",
-      "top": -43.2,
+      "top": -72,
       "left": 143.45,
       "rotate": 90,
       "attrs": { "value": "10000" }
@@ -86,10 +86,17 @@
     {
       "type": "wokwi-resistor",
       "id": "r5",
-      "top": -33.6,
+      "top": -62.4,
       "left": 220.25,
       "rotate": 90,
       "attrs": { "value": "330" }
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd2",
+      "top": -41.6,
+      "left": 312.8,
+      "attrs": { "pins": "i2c" }
     }
   ],
   "connections": [
@@ -108,16 +115,20 @@
     [ "dht1:VCC", "r2:2", "red", [ "h0" ] ],
     [ "relay1:VCC", "esp:3V3", "red", [ "h0" ] ],
     [ "esp:GND.2", "relay1:GND", "black", [ "v0" ] ],
-    [ "esp:22", "relay1:IN", "green", [ "h57.6", "v-143.8" ] ],
     [ "esp:GND.2", "led3:C", "black", [ "v0" ] ],
     [ "led1:A", "r3:1", "green", [ "v-20" ] ],
     [ "led2:A", "r4:1", "green", [ "v-20" ] ],
     [ "led3:A", "r5:1", "green", [ "v-20" ] ],
-    [ "r5:2", "esp:21", "green", [ "v0" ] ],
     [ "esp:GND.3", "dht1:GND", "black", [ "h57.6", "v38.4" ] ],
     [ "esp:GND.2", "ldr1:GND", "black", [ "v0" ] ],
     [ "esp:26", "r3:2", "green", [ "h-163.05", "v268.8" ] ],
-    [ "esp:27", "r4:2", "green", [ "h-316.65", "v211.2" ] ]
+    [ "esp:27", "r4:2", "green", [ "h-316.65", "v211.2" ] ],
+    [ "esp:19", "r5:2", "green", [ "h0" ] ],
+    [ "lcd2:SDA", "esp:21", "green", [ "h0" ] ],
+    [ "esp:23", "relay1:IN", "green", [ "h67.2", "v-134.2" ] ],
+    [ "lcd2:SCL", "esp:22", "green", [ "h-76.8", "v-38.1" ] ],
+    [ "lcd2:VCC", "esp:3V3", "red", [ "h-134.4", "v-86.3", "h-182.55" ] ],
+    [ "esp:GND.2", "lcd2:GND", "black", [ "h153.6", "v28.8" ] ]
   ],
   "serialMonitor": { "display": "always", "newline": "lf" },
   "dependencies": {}

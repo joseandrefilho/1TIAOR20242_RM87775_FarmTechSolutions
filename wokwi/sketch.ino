@@ -1,194 +1,254 @@
-#include <WiFi.h>            // Biblioteca para se conectar ao WiFi
-#include <PubSubClient.h>    // Biblioteca para se conectar a um broker MQTT
-#include <DHT.h>             // Biblioteca para manipular o sensor DHT22 (temperatura e umidade)
+// Inclusão das bibliotecas necessárias
+#include <Wire.h>              // I2C para comunicação com LCD
+#include <LiquidCrystal_I2C.h> // Controle do LCD
+#include <WiFi.h>              // Conectividade WiFi
+#include <PubSubClient.h>      // Comunicação MQTT
+#include <DHT.h>               // Sensor DHT22
 
-// Credenciais para acesso à rede WiFi e ao broker MQTT
-const char* ssid = "Wokwi-GUEST";        // Nome da rede WiFi
-const char* password = "";               // Senha da rede WiFi (não há senha neste caso)
-const char* mqtt_server = "test.mosquitto.org";  // Endereço do servidor MQTT (broker)
+// Otimização: Definição de constantes em PROGMEM para economia de RAM
+static const char PROGMEM WIFI_SSID[] = "Wokwi-GUEST";
+static const char PROGMEM WIFI_PASS[] = "";
+static const char PROGMEM MQTT_SERVER[] = "mqtt.eclipseprojects.io";
+static const char PROGMEM MQTT_TOPIC[] = "rm87775/farmtech/data";
 
-WiFiClient WOKWI_Client;                 // Cria um cliente WiFi
-PubSubClient client(WOKWI_Client);       // Cria um cliente MQTT usando o cliente WiFi
+// Otimização: Definição de pinos como const para melhor performance
+static const uint8_t DHTPIN = 4;        // DHT22 data pin
+static const uint8_t LDRPIN = 34;       // LDR analog pin
+static const uint8_t BP_PIN_P = 12;     // Button P pin
+static const uint8_t BP_PIN_K = 14;     // Button K pin
+static const uint8_t LED_P = 26;        // LED P pin
+static const uint8_t LED_K = 27;        // LED K pin
+static const uint8_t LED_RELE = 19;     // LED Relay status
+static const uint8_t RELE_PIN = 23;     // Relay control pin
 
-// Definição dos pinos para sensores e atuadores
-#define DHTPIN 4        // Pino GPIO onde o sensor DHT22 está conectado
-#define DHTTYPE DHT22   // Tipo do sensor DHT
-#define LDRPIN 34       // Pino GPIO onde o LDR está conectado (simulando sensor de pH)
-#define BP_PIN_P 12     // Pino GPIO do botão para o nutriente P
-#define BP_PIN_K 14     // Pino GPIO do botão para o nutriente K
-#define LED_P 26        // Pino GPIO do LED para indicar a necessidade do nutriente P
-#define LED_K 27        // Pino GPIO do LED para indicar a necessidade do nutriente K
-#define LED_RELE 21     // Pino GPIO do LED para indicar o estado do relé de irrigação
-#define RELE_PIN 22     // Pino GPIO do relé que controla a bomba de irrigação
+// Otimização: Constantes do sistema usando tipos apropriados
+static const uint8_t DHTTYPE = DHT22;
+static const uint16_t DISPLAY_INTERVAL = 2000;
+static const float UMIDADE_MIN = 50.0;
+static const float TEMP_MAX = 30.0;
+static const float PH_MIN = 5.0;
+static const float PH_MAX = 7.0;
 
-// Inicializa o sensor DHT no pino definido
+// Estrutura otimizada para dados do sistema
+struct SystemData {
+    float umidade;
+    float temperatura;
+    float pHLevel;
+    struct {
+        uint8_t led_P : 1;
+        uint8_t led_K : 1;
+        uint8_t nutrientP : 1;
+        uint8_t nutrientK : 1;
+        uint8_t releState : 1;
+    } flags;
+} sysData;
+
+// Instanciação dos objetos
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+WiFiClient wifiClient;
+PubSubClient mqttClient(wifiClient);
 DHT dht(DHTPIN, DHTTYPE);
 
-// Variáveis globais
-bool button_P = false;       // Estado do botão P
-bool button_K = false;       // Estado do botão K
-int led_P_state = LOW;       // Estado do LED do nutriente P
-int led_K_state = LOW;       // Estado do LED do nutriente K
-int led_Rele_state = LOW;    // Estado do LED do relé de irrigação
-float pHLevelIntermediario;  // Valor intermediário para o cálculo do pH
-bool nutrientP = false;      // Indica se o nutriente P é necessário
-bool nutrientK = false;      // Indica se o nutriente K é necessário
-float umidade = 0.0;         // Valor da umidade do solo
-bool releState = false;      // Estado do relé
+// Variáveis de controle de tempo
+unsigned long lastUpdate = 0;
 
-// Função para configurar a conexão WiFi
+// Função para inicializar o LCD
+void setupLCD() {
+    Wire.begin();
+    lcd.init();
+    lcd.backlight();
+    lcd.clear();
+    lcd.print(F("Iniciando..."));
+    delay(1000);
+}
+
+// Função para configuração do WiFi
 void setup_wifi() {
-  delay(10);
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
+    lcd.clear();
+    lcd.print(F("Conectando WiFi"));
+    Serial.print(F("Conectando a "));
+    Serial.println(WIFI_SSID);
 
-  WiFi.mode(WIFI_STA);             // Configura o ESP32 para modo station (conectar-se à rede)
-  WiFi.begin(ssid, password);      // Inicia a conexão WiFi
+    WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  // Espera a conexão ser estabelecida
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+        lcd.print(".");
+    }
 
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());  // Exibe o endereço IP atribuído pelo roteador
+    lcd.clear();
+    lcd.print(F("WiFi Conectado!"));
+    lcd.setCursor(0, 1);
+    lcd.print(WiFi.localIP());
+    Serial.println(F("\nWiFi conectado"));
+    Serial.println(F("Endereço IP: "));
+    Serial.println(WiFi.localIP());
+    delay(2000);
 }
 
-// Função para reconectar ao broker MQTT caso a conexão seja perdida
+// Função para reconexão MQTT
 void reconnect() {
-  // Continua tentando até conseguir se reconectar
-  while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
+    int tentativas = 0;
+    while (!mqttClient.connected() && tentativas < 3) {
+        Serial.print(F("Conectando MQTT..."));
+        lcd.clear();
+        lcd.print(F("Conectando MQTT"));
         
-    if (client.connect("WOKWI_Client")) {  // Tenta conectar ao broker MQTT
-      Serial.println("connected");
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      delay(5000); // Aguarda 5 segundos antes de tentar novamente
+        if (mqttClient.connect("ESP32_FarmTech")) {
+            Serial.println(F("Conectado"));
+            lcd.clear();
+            lcd.print(F("MQTT Conectado"));
+            delay(1000);
+        } else {
+            tentativas++;
+            Serial.print(F("Falha, rc="));
+            Serial.print(mqttClient.state());
+            Serial.println(F(" tentando novamente em 5s"));
+            lcd.clear();
+            lcd.print(F("Erro MQTT"));
+            lcd.setCursor(0, 1);
+            lcd.print(F("Tentativa: "));
+            lcd.print(tentativas);
+            delay(5000);
+        }
     }
-  }
 }
 
-// Configuração inicial dos componentes
+// Função para publicar dados no MQTT
+void publishData() {
+    if (!mqttClient.connected()) return;
+
+    static char message[128];
+    snprintf(message, sizeof(message),
+            "{\"U\":%.1f,\"T\":%.1f,\"pH\":%.1f,\"P\":%d,\"K\":%d,\"IRR\":%d}",
+            sysData.umidade, sysData.temperatura, sysData.pHLevel,
+            sysData.flags.nutrientP, sysData.flags.nutrientK, sysData.flags.releState);
+
+    if (mqttClient.publish(MQTT_TOPIC, message)) {
+        Serial.println(F("Dados publicados"));
+    }
+}
+
+// Função para atualização do LCD
+void updateDisplay() {
+    lcd.clear();
+    
+    // Linha 1: Umidade e Temperatura
+    lcd.setCursor(0, 0);
+    lcd.print(F("U:"));
+    lcd.print(sysData.umidade, 1);
+    lcd.print(F("% T:"));
+    lcd.print(sysData.temperatura, 1);
+    lcd.print(F("C"));
+    
+    // Linha 2: pH e Status
+    lcd.setCursor(0, 1);
+    lcd.print(F("pH:"));
+    lcd.print(sysData.pHLevel, 1);
+    lcd.print(F(" "));
+    
+    if (sysData.flags.nutrientP) lcd.print(F("P "));
+    if (sysData.flags.nutrientK) lcd.print(F("K "));
+    if (sysData.flags.releState) lcd.print(F("I"));
+}
+
+// Função para Serial Plotter
+void updatePlotter() {
+    Serial.print(F("Umidade:"));
+    Serial.print(sysData.umidade);
+    Serial.print(F(",Temperatura:"));
+    Serial.print(sysData.temperatura);
+    Serial.print(F(",pH:"));
+    Serial.println(sysData.pHLevel);
+}
+
+// Função para leitura de sensores
+void readSensors() {
+    sysData.umidade = dht.readHumidity();
+    sysData.temperatura = dht.readTemperature();
+    
+    if (!isnan(sysData.umidade) && !isnan(sysData.temperatura)) {
+        uint16_t ldrValue = analogRead(LDRPIN);
+        sysData.pHLevel = (map(ldrValue, 4063, 32, 0, 1400) / 100.0);
+        
+        sysData.flags.releState = (sysData.umidade < UMIDADE_MIN || 
+                                 sysData.temperatura > TEMP_MAX || 
+                                 sysData.pHLevel < PH_MIN || 
+                                 sysData.pHLevel > PH_MAX || 
+                                 sysData.flags.nutrientP || 
+                                 sysData.flags.nutrientK);
+        
+        digitalWrite(RELE_PIN, sysData.flags.releState);
+        digitalWrite(LED_RELE, sysData.flags.releState);
+    }
+}
+
+// Função para verificar botões
+void checkButtons() {
+    if (digitalRead(BP_PIN_P) == LOW) {
+        delay(50);
+        if (digitalRead(BP_PIN_P) == LOW) {
+            sysData.flags.nutrientP = !sysData.flags.nutrientP;
+            sysData.flags.led_P = sysData.flags.nutrientP;
+            digitalWrite(LED_P, sysData.flags.led_P);
+        }
+    }
+
+    if (digitalRead(BP_PIN_K) == LOW) {
+        delay(50);
+        if (digitalRead(BP_PIN_K) == LOW) {
+            sysData.flags.nutrientK = !sysData.flags.nutrientK;
+            sysData.flags.led_K = sysData.flags.nutrientK;
+            digitalWrite(LED_K, sysData.flags.led_K);
+        }
+    }
+}
+
+// Configuração inicial
 void setup() {
-  Serial.begin(115200);  // Inicializa a comunicação serial com taxa de 115200 bps
-  
-  randomSeed(analogRead(0));  // Inicializa o gerador de números aleatórios (usado para simular dados de irrigação)
-
-  setup_wifi();  // Configura o WiFi
-  client.setServer(mqtt_server, 1883);  // Define o servidor MQTT e a porta
-
-  // Inicialização dos pinos como entrada/saída
-  pinMode(BP_PIN_P, INPUT_PULLUP);  // Botão com pull-up interno (evita leitura flutuante)
-  pinMode(BP_PIN_K, INPUT_PULLUP);  
-  pinMode(LED_P, OUTPUT);           // LED do nutriente P como saída
-  pinMode(LED_K, OUTPUT);           
-  pinMode(LED_RELE, OUTPUT);        
-  pinMode(LDRPIN, INPUT);           // LDR como entrada
-  pinMode(RELE_PIN, OUTPUT);        
-  digitalWrite(RELE_PIN, LOW);      // Relé inicialmente desligado
-  
-  dht.begin();  // Inicializa o sensor DHT
-
+    Serial.begin(115200);
+    
+    // Configuração de pinos
+    pinMode(BP_PIN_P, INPUT_PULLUP);
+    pinMode(BP_PIN_K, INPUT_PULLUP);
+    pinMode(LED_P, OUTPUT);
+    pinMode(LED_K, OUTPUT);
+    pinMode(LED_RELE, OUTPUT);
+    pinMode(RELE_PIN, OUTPUT);
+    
+    setupLCD();           // Inicializa LCD
+    dht.begin();         // Inicializa DHT
+    setup_wifi();        // Configura WiFi
+    mqttClient.setServer(MQTT_SERVER, 1883);  // Configura servidor MQTT
+    
+    // Estado inicial dos LEDs
+    digitalWrite(LED_P, LOW);
+    digitalWrite(LED_K, LOW);
+    digitalWrite(LED_RELE, LOW);
+    digitalWrite(RELE_PIN, LOW);
 }
 
-// Loop principal que mantém o sistema em funcionamento
+// Loop principal
 void loop() {
-  if (!client.connected()) {
-    reconnect();  // Reconecta ao broker MQTT, caso não esteja conectado
-  }
-  client.loop();  // Mantém a conexão MQTT ativa
-
-  // Leitura dos botões com debounce
-  if (digitalRead(BP_PIN_P) == LOW) {
-    delay(50);  // Delay de debounce para evitar leituras falsas
-    if (digitalRead(BP_PIN_P) == LOW) { 
-      led_P_state = !led_P_state;  // Alterna o estado do LED do nutriente P
-      nutrientP = led_P_state;     // Atualiza o estado do nutriente P
-      digitalWrite(LED_P, led_P_state);  // Atualiza o LED
+    // Verifica conexões
+    if (!mqttClient.connected()) {
+        reconnect();
     }
-  }
+    mqttClient.loop();
 
-  if (digitalRead(BP_PIN_K) == LOW) {
-    delay(50);
-    if (digitalRead(BP_PIN_K) == LOW) { 
-      led_K_state = !led_K_state;  // Alterna o estado do LED do nutriente K
-      nutrientK = led_K_state;     // Atualiza o estado do nutriente K
-      digitalWrite(LED_K, led_K_state);  // Atualiza o LED
+    // Atualiza estado do sistema
+    checkButtons();
+    readSensors();
+
+    // Atualiza displays e publica dados
+    unsigned long currentMillis = millis();
+    if (currentMillis - lastUpdate >= DISPLAY_INTERVAL) {
+        updateDisplay();
+        updatePlotter();
+        publishData();
+        lastUpdate = currentMillis;
     }
-  }
 
-  // Leitura do sensor DHT22 (umidade)
-  float umidade = dht.readHumidity();
-  if (isnan(umidade)) {
-    Serial.println("Falha na leitura do sensor DHT22!");
-    return;  // Sai do loop caso a leitura falhe
-  }
-
-  // Leitura do sensor DHT22 (temperatura)
-  float temperatura = dht.readTemperature();
-  if (isnan(temperatura)) {
-    Serial.println("Falha na leitura do sensor DHT22!");
-    return;
-  }
-
-  // Leitura do LDR (simulando pH)
-  int ldrValue = analogRead(LDRPIN);
-  
-  // Conversão do valor lido para o nível de pH (ajustar conforme necessário)
-  pHLevelIntermediario = map(ldrValue, 4063, 32, 0, 1400);
-  float pHLevel = pHLevelIntermediario / 100.00;
-
-  // Lógica para determinar se a irrigação deve ser ativada
-  if (shouldIrrigate(nutrientP, nutrientK, pHLevel, umidade, temperatura)) {
-    digitalWrite(RELE_PIN, HIGH); // Liga a bomba de irrigação
-    digitalWrite(LED_RELE, HIGH); // Acende o LED
-  } else {
-    digitalWrite(RELE_PIN, LOW); // Desliga a bomba de irrigação
-    digitalWrite(LED_RELE, LOW); // Apaga o LED
-  }
-
-  // Exibição dos dados coletados no Monitor Serial
-  Serial.print("Nutriente P: "); Serial.println(nutrientP);
-  Serial.print("Nutriente K: "); Serial.println(nutrientK);
-  Serial.print("Umidade do Solo: "); Serial.print(umidade); Serial.println("%");
-  Serial.print("Temperatura: "); Serial.print(temperatura); Serial.println("°C");
-  Serial.print("Nível de pH: "); Serial.println(pHLevel);
-  Serial.print("Bomba de Irrigação: "); Serial.println(digitalRead(RELE_PIN) == HIGH ? "Ligada" : "Desligada");
-  Serial.println("----");
-
-  // Gera valor de irrigação aleatório se o relé estiver ligado, senão 0
-  float irrigacao = digitalRead(RELE_PIN) == HIGH ? random(50, 151) : 0;
-
-  // Publica os dados coletados no broker MQTT
-  publish_data(umidade, temperatura, pHLevel, nutrientP, nutrientK, irrigacao);
-
-  delay(2000); // Aguarda 2 segundos antes da próxima leitura
-}
-
-// Função para decidir se a irrigação deve ser ativada
-bool shouldIrrigate(bool nP, bool nK, float pH, float umidade, float temperatura) {
-  // Regras funcionais para a irrigação:
-  // - A irrigação é ativada se a umidade estiver abaixo de 50%
-  // - Se o nutriente P ou K for necessário
-  // - Se o nível de pH estiver fora da faixa ideal (5.00 a 7.00)
-  // - Se a temperatura estiver acima de 30°C (indicando alta evapotranspiração)
-  // - Ou se a temperatura estiver abaixo de 10°C (indicando necessidade de regulação)
-  return (umidade < 50.0 || nP || nK || pH < 5.00 || pH > 7.00 || temperatura > 30.0 || temperatura < 10.0);
-}
-
-// Função para publicar dados no broker MQTT
-void publish_data(float umidade, float temperatura, float pH, bool nP, bool nK, float irrigacao) {
-  char message[256];
-  snprintf(message, sizeof(message), 
-           "{\"Umidade do Solo\": %.2f, \"Temperatura\": %.2f, \"PH\": %.2f, \"Nutriente P\": %s, \"Nutriente K\": %s, \"Irrigacao\": %.2f}",
-           umidade, temperatura, pH, nP ? "true" : "false", nK ? "true" : "false", irrigacao);
-
-  client.publish("farmtech/monitoramento", message);  // Publica a mensagem no tópico do MQTT
+    delay(100);
 }
