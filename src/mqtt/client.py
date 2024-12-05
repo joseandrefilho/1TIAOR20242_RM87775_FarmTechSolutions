@@ -3,7 +3,7 @@ import json
 from utils.funcoes import Funcoes
 
 class MQTTClient:
-    def __init__(self, broker="test.mosquitto.org", port=1883, topic="farmtech/monitoramento"):
+    def __init__(self, broker="mqtt.eclipseprojects.io", port=1883, topic="rm87775/farmtech/data"):
         self.broker = broker
         self.port = port
         self.topic = topic
@@ -24,16 +24,15 @@ class MQTTClient:
             raw_payload = msg.payload.decode()
             payload = json.loads(raw_payload)
 
-            # Cria um objeto Leitura com os dados recebidos
+            # Criando objeto Funcoes com os dados do ESP32
             funcoes = Funcoes(
-                umidadeSolo=payload.get('Umidade do Solo'),
-                temperatura=payload.get('Temperatura'),
-                pH=payload.get('PH'),
-                nutrienteP=payload.get('Nutriente P'),
-                nutrienteK=payload.get('Nutriente K'),
-                irrigacao=payload.get('Irrigacao')               
+                umidadeSolo=payload.get('U'),      # Umidade
+                temperatura=payload.get('T'),      # Temperatura
+                pH=payload.get('pH'),              # pH
+                nutrienteP=payload.get('P'),       # Nutriente P
+                nutrienteK=payload.get('K'),       # Nutriente K
+                irrigacao=payload.get('IRR')       # Estado da Irrigação
             )
-
             funcoes.save()  # Salva a leitura no banco de dados
         except json.JSONDecodeError as e:
             print(f"Erro ao decodificar mensagem MQTT: {e}")
